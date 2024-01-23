@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import List from "./List";
+import Landing from "./landing";
+const App = () => {
+  const [items, setItems] = useState([]);
 
-function App() {
+  useEffect(() => {
+    fetch("https://api.escuelajs.co/api/v1/products")
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        setItems(data);
+      });
+  }, []);
+  const hasItems = items.length > 0;
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Landing items={items} />
+      {hasItems ? <List items={items} /> : <h2>Loading...</h2>}
+    </>
   );
-}
+};
 
 export default App;
